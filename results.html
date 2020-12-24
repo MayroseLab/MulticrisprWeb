@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--script src="jquery.js"></script-->
+    <!--script src="jquery.js"></script-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--link rel="shortcut icon" href="bootstrap-3.0.3/docs-assets/ico/favicon.png"-->
+
+    <title>The CRISPys Server</title>
+<!--
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Custom styles for this template -->
+    <!--link href="bootstrap-3.0.3/examples/navbar/navbar.css" rel="stylesheet"-->
+    <link rel="stylesheet" type="text/css" href="http://multicrispr.tau.ac.il/css/multicrispr.css">
+
+    
+	<style type="text/css">
+        ul {
+            padding-left: 20 px;
+        }
+
+        pre {
+            border: 1px inset;
+            border-bottom: 1px solid #c5d1d8;
+            background-color: #e7e7e7;
+            padding: 6px;
+            /* text wrap */
+            white-space: pre-wrap; /* css-3 */
+            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+        }
+
+        .loaderImg {
+            background-image: url(img/ajax-loader.gif);
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 20px;
+        }
+
+        #filesList li {
+            list-style-type: none;
+        }
+
+        #filesList a {
+/*            background: transparent url(images/Icons/_blank.png) center left no-repeat;  */
+            display: inline-block;
+            padding-left: 20px;
+            line-height: 18px;
+        }
+
+        #imagesList li {
+            list-style-type: none;
+            padding-bottom: 20px;
+        }
+
+        #site_title a {
+            text-decoration: none !important;
+        }
+
+        #imagesData span {
+            color: black;
+            font-size: 11pt;
+            padding-right: 20px;
+        }
+
+        .lastSpanTitle {
+            padding-right: 0px !important;
+            float: right;
+        }
+    </style>
+	
+    <!-- Arquivos utilizados pelo jQuery lightBox plugin -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/jquery.scrollTo-1.4.3.1-min.js"></script>
+    <script src="js/jquery.localscroll-1.2.7-min.js"></script>
+    <script src='js/purl.js'></script>
+	
+    <script>
+        $(document).ready(function () {
+            /* a global var */
+			window.myJsonDataFromFile = [];
+            
+			$.localScroll();
+				
+            SetMenuWidth();
+
+            jobId = $.url().param('jobId');
+            $("#resultsHeader").text("Job #" + jobId);
+			
+			removeRepetitions = $.url().param('removeRepetitions');
+			if (typeof removeRepetitions == 'undefined') {
+				removeRepetitions = 1;
+			}
+			
+            GetResultsFromServer();
+			
+        });
+
+        function SetMenuWidth() {
+            var sizeOfList = $("#templatemo_menu ul li").size();
+
+            var widthOfMenuItem = 80;
+
+            var totalMenuWidth = widthOfMenuItem * sizeOfList;
+
+            $("#templatemo_menu").css('width', totalMenuWidth + "px");
+        }
+
+        function GetResultsFromServer() {
+            $.getJSON("/cgi-bin/multicrisprResults.cgi", { 'jobId': jobId, 'removeRepetitions' : removeRepetitions }, GetResultFromServerResponse);
+        }
+
+        function GetResultFromServerResponse(data, status) {
+			
+			$(".loaderImg").css("display", "none");
+            $("#resultsData").css("display", "block");
+
+            if (data.errorOccured) {
+               HandleError(data.error);
+            }
+            else {
+                HandleData(data)
+            }
+
+            var jobStatus = data.jobStatus;
+
+
+            if (jobStatus != 'finished') {
+                //setTimeout(GetResultsFromServer, 3 * 1000); // 30 seconds
+				// Ofer refresh bug fix not perfect
+				setTimeout(function () { 
+				location.reload();
+				}, 30 * 1000);
+            }
+			
+			var innerSample = $.url().param('innerSample');
+			if (typeof innerSample != 'undefined') {
+				document.getElementById(1).style.display = innerSample.charAt(0) === '1' ? 'block' : 'none';
+				document.getElementById(2).style.display = innerSample.charAt(1) === '1' ? 'block' : 'none';
+				document.getElementById(3).style.display = innerSample.charAt(2) === '1' ? 'block' : 'none';
+				document.getElementById(4).style.display = innerSample.charAt(3) === '1' ? 'block' : 'none';
+			}
+			
+			var fMM = $.url().param('filterMM');
+			if (jobStatus == 'finished' && typeof fMM != 'undefined') {
+                $("#selectMM").val(fMM);
+				$("#selectMM").val(fMM).change();
+            }
+			
+			var scrl = $.url().param('scrl');
+			if (typeof scrl != 'undefined') {
+				$(document).scrollTop(parseInt(scrl));
+			}
+			
+            //window.location.reload(True); 	
+        }
+
+        function HandleError(error) {
+            $("#resultsData").css("display", "none");
+            $("#resultsError").css("display", "block");
+            $("#erorText").text(error);
+        }
+
+        function HandleData(data) {
+
+            $("#resultsData").css("display", "block");
+            $("#resultsError").css("display", "none");
+
+            $("#logText").text(data.logText);
+            $("#outText").text(data.outText);
+//            $("#tableview").text(data.resultTable);
+
+            //var jobType = data.jobType;
+
+            //$("#jobType").text("Job type: " + jobType);
+
+            //$("#jobType").children().remove();
+            //$("#jobType").append(
+            //    $('<i>').append(jobType)
+            //    );
+
+            var jobStatus = data.jobStatus;
+
+            //$("#jobStatus").find('i').remove();
+            $("#jobStatus").children().remove();
+            $("#jobStatus").append(
+                $('<i>').append(jobStatus)
+                );
+				
+			$("#jobTitle").append(
+                $('<i>').append(data.jobTitle)
+				);
+				
+			$("#algType").append(
+                $('<i>').append(data.algType)
+                );
+												
+			$("#params").append(
+                data.params
+                );
+      
+      $("#tableview").append(
+                data.resultTable);
+                
+      $("#tableCover").append(
+                data.resultTableCover);
+                
+      $("#linkTree").append(
+                data.linkTree);
+                
+      $("#download").append(
+                data.download);
+      
+
+					
+			if (jobStatus == "finished") {
+                $('#filesData').css("display", "block");
+				$('#outTextDiv').css("display", "block");
+				$('#treeContainer').css("display", "block");
+        $('#tableContainer').css("display", "block");
+        
+                $('#filesList').empty();
+
+                if (data.files.length == 0) {
+                    var li = $('<li>');
+                    li.css("list-style-type", "none");
+                    li.append("No output files for this job.");
+                    if (jobType == "Best K by Evanno") {
+                        li.append(" The best K according to Evanno's method is the K for which DeltaK is maximal.");
+                    }
+                    $('#filesList').append(li);
+                }
+                else {
+                    // adding li's for files
+                    for (index = 0; index < data.files.length; index++) {
+
+                        var path = data.files[index].path;
+                        var name = data.files[index].name;
+
+                        var ext = name.split('.').pop();
+
+                        if (ext == name) {
+                            ext = '_blank';
+                        }
+
+                        ext = ext.toLowerCase();
+
+                        var aElement = $('<a>');
+
+                        //aElement.css('background-image', 'url(img/' + ext +'.png)');    list-style-image: url(images/small_wood_phone.png);
+                        //aElement.css('list-style-image', 'url(img/' + ext +'.png)');    //: url(images/small_wood_phone.png);
+
+                        aElement.attr('href', path).attr('target', "_blank").append(name);
+                        $('#filesList').append($('<li>')).append(aElement);
+                        //    $('#filesList').append(
+                        //	$('<li>').css('list-style-image', 'url(img/' + ext +'.png)').append(aElement)
+                        //	);
+                    }
+
+                    $('#filesList').append(
+                        $('<li>').append(
+                            "<h5>Output files will be stored on MultiCRISPR server for one month.<br>It is advisable to download the output Files.</h5>"
+                    ));
+                }
+
+            }
+        }
+
+    </script>
+
+
+	
+</head>
+<body>
+<div class="container" style="background-color:#FFFFFF;">
+
+        <!-- Static navbar -->
+        <div class="navbar navbar-default" role="navigation" >
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!--a class="navbar-brand" href="#">CLUMPAK</a-->
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="http://multicrispr.tau.ac.il">Main</a></li>
+                    <li><a href="help.html">Help</a></li>
+                </ul>
+            </div>
+        </div>     <!-- Static navbar -->
+
+        <div class="row">
+          <div class="col-md-10" align=center>
+            <img src="CRIPSys.PNG" width="400" height="100" >
+          </div>
+        </div>
+
+		
+		
+
+        <!-- jumbotron -->
+        <div class="jumbotron">
+
+            <span id="top"></span>
+            <div id="templatemo_wrapper">
+                <!--div id="templatemo_header">
+                <div id="site_title">
+                    <a href="index.html"><h1>CLUMPAK</h1></a>
+                </div>
+                <div id="templatemo_menu">
+                    <ul>
+                    <li><a href="#results">Job results</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div> <!-- end of templatemo_menu -->
+                <!--/div> <!-- end of header -->
+                <!-- results section -->
+                <div id="templatemo_main">
+                    <div id="results"></div>
+                    <div class="content_box_top"></div>
+                    <div class="content_box">
+                        <h2 id="resultsHeader"></h2>
+                        <div class="loaderImg"></div>
+                        <div id="resultsData" style="display: none">
+                            <!--h4 id="jobType">Job type: </h4-->
+                						<h4 id="jobStatus">Status: </h4>
+                						<!--h4 id="jobTitle">Job title: </h4>
+                						<h4 id="algType">Algorithm Type: </h4-->
+                						<h4 id="params"></h4>
+
+					                	<!--div id="ofer"></div-->
+<!--
+						<div class="container" id="treeContainer" style="display:none">     
+                          <br><h3>Results:</h3>
+						  <div class="treerow">
+							  <div class="col-sm-12">
+							    <div id="treeview4" class=""></div>
+						  	</div>
+
+						  </div>
+
+						</div>
+						<script src="js/bootstrap-treeview.js"></script>
+-->            
+            <!-- Shlomztion -->
+            <div id="tableContainer" style="display:none"> 
+            <br>
+              <h3>Results:</h3> 
+              <h4>Note: If you wish to view these results again without resubmitting the query, please bookmark this page. The results will be kept the server for three months.</h4>
+			  <!-- <br><span id="myspan"> 0 </span><br> -->
+              <div id="download"></div>
+              <div id="linkTree"></div>
+				      <div class="table">
+							  <div class="col-lg-20">
+							    <div id="tableCover" class=""></div>
+                <br><br>
+						  	</div>                                        
+							  <div class="col-lg-20">
+							    <div id="tableview" class="">
+                    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+                  </div>
+                <br><br>
+						  	</div>       
+						  </div>
+              <br><br>
+             </div> 
+             <!-- Shlomztion -->					
+							
+						<!--h4 id="paramsText">paramsText: </h4-->
+<!--
+                            <div class="cleaner h30"></div>
+                            <div id="filesData" style="display: none">
+                                <h3>Output files:</h3>
+                                <ul id="filesList"></ul>
+                            </div>
+                            <div class="cleaner h30"></div>
+                            <div id="imagesData" style="display: none">
+                                <h3>Output Images:</h3>
+                                <ul id="imagesList"></ul>
+                            </div>
+                            <div id="outTextDiv" style="display: none">
+                                <h3>Results:</h3>
+                                <pre id="outText"></pre>
+                            </div>
+                            <div id="logData">
+                                <h3>Log Data:</h3>
+                                <pre id="logText"></pre>
+                            </div>
+
+--->
+                        </div>
+                        <div id="resultsError" style="display: none">
+                            <h3>Error!</h3>
+                            <pre id="erorText"></pre>
+                        </div>
+                        <div class="cleaner h30"></div>
+                        <!--a href="#"  rel="nofollow" target="_blank" class="gototop">Go to Top</a-->
+                        <div class="cleaner"></div>
+                    </div> <!-- end of a content box -->
+                    <div class="content_box_bottom"></div>
+
+                </div> <!-- end of main -->
+
+            </div>
+        </div> <!--container-->
+	<script src="/js/googleAnalytics.js"></script>
+	<br><br><br>
+ 
+ <script>
+  function myFunction(sgRNA) {
+       document.getElementById(sgRNA).style.display = "block";
+  }
+ </script>
+</body>
+</html>

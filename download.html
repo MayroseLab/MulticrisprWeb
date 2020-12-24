@@ -1,0 +1,178 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!--script src="jquery.js"></script-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="bootstrap-3.0.3/docs-assets/ico/favicon.png">
+
+    <title>CLUMPAK server</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-3.0.3/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="bootstrap-3.0.3/examples/navbar/navbar.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="http://clumpak.tau.ac.il/css/clumpak.css">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#popover1").popover();
+            $("#popover2").popover();
+            $("#popover3").popover();
+            $("#popover4").popover();
+            $("#popover5").popover();
+            $("#popover6").popover();
+            $("#popover7").popover();
+
+        });
+    </script>
+
+
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Static navbar -->
+        <div class="navbar navbar-default" role="navigation">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!--a class="navbar-brand" href="#">CLUMPAK</a-->
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Main Pipline</a></li>
+                    <li><a href="distruct.html">Distruct for many K's</a></li>
+                    <li><a href="compareDifferentPrograms.html">Compare</a></li>
+                    <li><a href="bestK.html">Best K</a></li>
+                    <!--li><a href="gotoResults.html">Go to results</a></li-->
+                    <li class="active"><a href="download.html">Download</a></li>
+                    <li><a href="help.html">Help</a></li>
+                    <!--li><a href="blog.html">Blog Posts</a></li-->
+                    <!--li><a href="portfolio.html">Portfolio</a></li-->
+                    <li><a href="contact.html">Contact & Citing</a></li>
+                    <li><a href="issues.html">Issues</a></li>
+                </ul>
+            </div>
+        </div>     <!-- Static navbar -->
+
+        <div class="row">
+            <div class="col-md-1">  <!--img style="float:left" src="http://new.tau.ac.il/sites/default/files/TAU_Logo_2.png" class="img-responsive" alt="Responsive image"/--></div>
+            <div class="col-md-10" align=center><h1 class="small">Clumpak - <u>Clu</u>ster <u>M</u>arkov <u>P</u>ackager <u>A</u>cross <i><u>K</u></i></h1></div>
+            <div class="col-md-1">  <!--img style="float:right" src="http://new.tau.ac.il/sites/default/files/TAU_Logo_2.png"/--></div>
+        </div>
+
+        <!-- jumbotron -->
+        <div class="jumbotron">
+
+
+            <br>
+            <p><font size=4 color="#DB0400"><b>This is a beta version.</b></font></p>
+            <p>
+                <font color="#DB0400" size="3">
+                    We are working on improving CLUMPAK for enhanced flexibility and a better user interface. If you run into problems please email <a href="mailto:#"><i>evolseq@post.tau.ac.il</i></a> and specify the job ID.
+                    <br>If you haven't received any results within a few hours, please contact us and re-submit. See <a href="issues.html"><i>Known Issues</i></a>.  Thank you!
+                </font>
+            </p>
+
+
+            <br>
+            <h2>Download software (including manual and examples):</h2>
+            <h4>Last update: March 26, 2015</h4>
+            <!--p><a href="http://clumpak.tau.ac.il/download/CLUMPAK.zip"><i>CLUMPAK.zip</i></a></p-->
+            <a href='http://dstats.net/download/http://clumpak.tau.ac.il/download/CLUMPAK.zip'><i>CLUMPAK.zip</i></a>
+            <script type='text/javascript' src='http://dstats.net/dstatsjs.php?file=http://clumpak.tau.ac.il/download/CLUMPAK.zip'></script>
+            <!--script type='text/javascript'>document.write(dsdlcounter(dsCounter));</script-->
+
+            <hr>
+
+            <h2>Download manual:</h2>
+            <p><a href="http://clumpak.tau.ac.il/download/CLUMPAK_Documentation.pdf" target="_blank"><i>CLUMPAK Documentation</i></a></p>
+            <hr>
+
+            <h2>Examples for single input file:</h2>
+            CLUMPAK supports three formats for results. Please see the following zip for examples
+            <p><a href="http://clumpak.tau.ac.il/download/input examples/basic_result_files_examples.zip" target="_blank"><i>basic_result_files_examples.zip</i></a></p>
+            <hr>
+
+            <h2>Download input examples:</h2>
+            <h3><b>Main pipeline:</b></h3>
+            <p>The following zip file can be used to test CLUMPAK's "Main pipeline" feature: <br> <a href="http://clumpak.tau.ac.il/download/input examples/Structure_toy_data.zip"><i>Structure_toy_data.zip</i></a></p>
+            <p>If you are using <a href="http://clumpak.tau.ac.il/download/input examples/Structure_toy_data.zip"><i>Structure_toy_data.zip</i></a> for trying our Main pipeline, you can use the following file as a label file: <br> <a download href="http://clumpak.tau.ac.il/download/input examples/toy_data_labels.txt" download><i>toy_data_labels.txt</i></a></p>
+            <p>The following zip file can be used to test CLUMPAK's "Main pipeline" feature in ADMIXTURE format: <br> <a href="http://clumpak.tau.ac.il/download/input examples/Admixture_toy_data.zip"><i>Admixture_toy_data.zip</i></a></p>
+            <p>If you are using the ADMIXTURE format, you can use the following file as a populations file:<a href="http://clumpak.tau.ac.il/download/input examples/toy_data_populations_file.txt" download><i>toy_data_populations_file.txt</i></a></p>
+
+            <hr>
+
+            <h3><b>Distruct for many K's:</b></h3>
+            <p>The following zip file can be used to try our "Distruct for many K's" feature: <br> <a href="http://clumpak.tau.ac.il/download/input examples/Structure_distuct_4_many_Ks_input.zip" download><i>Structure_distuct_4_many_Ks_input.zip</i></a></p>
+            <p>If you are using <a href="http://clumpak.tau.ac.il/download/input examples/Structure_distuct_4_many_Ks_input.zip" download><i>Structure_distuct_4_many_Ks_input.zip</i></a> for trying our "Distruct for many K's" feature, you can use the following file as a label file: <br> <a download href="http://clumpak.tau.ac.il/download/input examples/toy_data_labels.txt" download><i>distruct_labels_data.txt</i></a></p>
+            <p>The following zip file can be used to test CLUMPAK's "Distruct for many K's" feature in ADMIXTURE format:<br><a href="http://clumpak.tau.ac.il/download/input examples/Admixture_distuct_4_many_Ks_input.zip" download><i>Admixture_distuct_4_many_Ks_input.zip</i></a></p>
+            <p>If you are using the ADMIXTURE format, you can use the following file as a populations file:<br><a href="http://clumpak.tau.ac.il/download/input examples/toy_data_populations_file.txt" download><i>toy_data_populations_file.txt</i></a></p>
+
+
+            <hr>
+
+
+            <h3><b>Compare different programs:</b></h3>
+            <p>
+                The following two files (along with <a download href="http://clumpak.tau.ac.il/download/input examples/toy_data_labels.txt" download><i>toy_data_labels.txt</i></a>) can be used to try our "Compare different programs" feature:
+                <br>
+                <a href="http://clumpak.tau.ac.il/download/input examples/Structure_K6_model1.zip"><i>Structure_K6_model1.zip</i></a>
+                <br>
+                <a href="http://clumpak.tau.ac.il/download/input examples/Structure_K6_model2.zip"><i>Structure_K6_model2.zip</i></a>
+            </p>
+            <hr>
+            <h3><b>Best K by Evanno:</b></h3>
+            <p>The following zip file can be used to test CLUMPAK's "Best K by Evanno" feature: <br> <a href="http://clumpak.tau.ac.il/download/input examples/Structure_toy_data.zip"><i>Structure_toy_data.zip</i></a></p>
+            <p>The following file can be used to run Evanno with the log probability table file format: <br> <a href="http://clumpak.tau.ac.il/download/input examples/toy_data_log_prob_file.txt" download><i>toy_data_log_prob_file.txt</i></a></p>
+            <hr>
+
+            <h3><b>Optional input files:</b></h3>
+            <p>Populations file:  <a href="http://clumpak.tau.ac.il/download/input examples/toy_data_populations_file.txt" download><i>toy_data_populations_file.txt</i></a></p>
+            <p>Labels file: <a href="http://clumpak.tau.ac.il/download/input examples/toy_data_labels.txt " download><i>toy_data_labels.txt </i></a></p>
+            <p>Colors file:  <a href="http://clumpak.tau.ac.il/download/input examples/colors_file.txt" download><i>colors_file.txt</i></a></p>
+            <p>Drawparams file:  <a href="http://clumpak.tau.ac.il/download/input examples/drawparams.txt" download><i>drawparams.txt</i></a></p>
+            <hr>
+
+            <h3><b>Download data set used for testing CLUMPAK:</b></h3>
+            <p>A sample of 399 individuals from 16 Jewish and non-Jewish populations at 678 microsatellite markers:</p>
+            <p><a href="http://clumpak.tau.ac.il/download/input examples/KopelmanEtAl2009.datafile" download><i>KopelmanEtAl2009.datafile</i></a></p>
+            <p><a href="http://clumpak.tau.ac.il/download/input examples/KopelmanEtAl2009_readme.txt" download><i>KopelmanEtAl2009_readme.txt</i></a></p>
+            <hr>
+
+        </div>      <!-- jumbotron -->
+    </div> <!-- /container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="bootstrap-3.0.3/dist/js/bootstrap.min.js"></script>
+	<script src="/js/googleAnalytics.js"></script>
+	
+</body>
+</html>

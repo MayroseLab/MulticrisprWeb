@@ -1,0 +1,112 @@
+<html>
+<header>
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="js/jquery.scrollTo-1.4.3.1-min.js"></script>
+	<script src='js/purl.js'></script>
+	<script>
+        $(document).ready(function () {
+            selectMM = $.url().param('selectMM');
+			
+			//$.localScroll();
+			$("#selectMM").val(selectMM);
+			
+			//window.scroll(0, 0);
+			//$('body').scrollTo('#abc');
+			//$("html,body").scrollTop(400);
+			var aa = '+=500px';
+			$.scrollTo(aa, 800, { axis:'y' });
+			
+			//var aa = '{ scrollTop: 100 }';
+			//$("html, body").animate({ scrollTop: "500px" });
+			
+			//document.body.scrollTop = 1000;
+			var n = $(window).scrollTop();
+			document.getElementById("myspan").innerHTML=n.toString();
+        });
+		$( window ).scroll(function() {
+			n = $(window).scrollTop();
+			document.getElementById("myspan").innerHTML=n.toString();
+		});
+
+	</script>
+<title>This is title</title>
+</header>
+<body>
+Hello world
+
+<select id="selectMM" name="selectMM" onchange="javascript:filterMM();">
+	<option value="100"></option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	<option value="13">13</option>
+	<option value="14">14</option>
+	<option value="15">15</option>
+	<option value="16">16</option>
+	<option value="17">17</option>
+	<option value="18">18</option>
+	<option value="19">19</option>
+	<option value="20">20</option>
+</select>
+<!--	<button type="button" onclick="$(window).scrollTo('+=500px', 800, { axis:'y' })" >Click Me!</button>   -->
+<button type="button" onclick="$(document).scrollTop(500);" >Click Me!</button>
+<br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<br><span id="myspan"> 0 </span><br> 
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label id="abc">ABC</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+<label id="bbb">BBB</label><br><br><br>
+<label>Male</label><br><br><br>
+<label>Male</label><br><br><br>
+</body>
+</html>

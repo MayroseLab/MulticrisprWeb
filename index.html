@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--script src="jquery.js"></script-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--link rel="shortcut icon" href="bootstrap-3.0.3/docs-assets/ico/favicon.png"-->
+
+    <title>The CRISPys Server</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="bootstrap-3.0.3/examples/navbar/navbar.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://multicrispr.tau.ac.il/css/multicrispr.css">
+    <link rel="stylesheet" type="text/css" href="http://multicrispr.tau.ac.il/css/crista.css">
+
+    <script>
+        $(function (){
+            $("#popoverHomology").popover(); 
+            $("#popoverfuncType").popover(); 
+            $("#popoverThreshold").popover();
+        });	
+  	function validateForm(){
+  		var file	= document.forms["myForm"]["inputFile"].value;
+  		var txt		= document.forms["myForm"]["inputText"].value;
+  		
+  		if ( (file == null || file == "") && (txt == null || txt == "") ) 
+  		{
+  			alert("Please select your FASTA file, or type your sequences");
+  			return false;
+  		}
+  
+  		if ( !(file == null || file == "") && !(txt == null || txt == "") ) 
+  		{
+  			alert("Please enter either your FASTA file, or your sequences, not both");
+  			return false;
+  		}
+		if (document.getElementById("btn-crista").value == 'Yes' && document.getElementById("genomeAssembly").value == "Not_selected")
+		{
+			alert("Please select a genomic reference or turn this feature off");
+  			return false;
+		}
+  	}
+
+function recaptchaCallback() { 
+    $('#recaptcha_check_empty').val(1);
+}	
+  	function loadExample(){
+  		//$("#inputFile").val("");
+  		$("#inputText").load("/download/input_examples/example.txt");
+  	}
+	
+  	function onChooseFile(){
+  		//$("#inputText").val("");
+  	}
+ 
+   function display_threshold(ans)
+   {
+     if (ans == 'yes')
+    { 
+      document.getElementById("display_threshold").style.display = 'inline-block';
+    }
+    else 
+    {
+      document.getElementById("display_threshold").style.display = 'none';
+    }
+   }
+
+   /*function display_advanced()
+   {
+      document.getElementById("Advanced options").style.display = document.getElementById("Advanced options").style.display === 'none' ? 'block' : 'none';
+   }*/
+
+   /*function toggleYesNo()
+   {
+		document.getElementById("btn-crista").innerHTML = document.getElementById("btn-crista").innerHTML === 'No' ? 'Yes' : 'No';
+		if (document.getElementById("btn-crista").innerHTML == 'Yes') {
+			document.getElementById("genomeAssembly").value = 'Please select genome assembly';
+		}
+   }*/
+
+
+    </script>
+
+
+    <script type="text/javascript">
+
+        function show_div_name(div_id){
+            var show = document.getElementById(div_id);
+            show.style.display = 'block';
+        }
+
+        function hide_div_name(div_id){
+            var show = document.getElementById(div_id);
+            show.style.display = 'none';
+			document.getElementById("genomeAssembly").value = "Not_selected";
+        }
+
+
+		
+
+		
+		
+
+		</script>
+
+	
+		
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74752822-1', 'auto');
+  ga('send', 'pageview');
+
+
+    </script>
+
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+
+<body>
+
+<div class="container" style="background-color:#FFFFFF;">
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-default" role="navigation">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!--a class="navbar-brand" href="#">CLUMPAK</a-->
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="http://multicrispr.tau.ac.il">Main</a></li>
+                <li><a href="help.html">Help</a></li>
+            </ul>
+        </div>
+    </div>     <!-- Static navbar -->
+
+    <div class="row">
+        <div class="col-lg-10" align=center>
+            <img src="CRIPSys.PNG" width="400" height="100">
+        </div>
+    </div>
+
+    <!-- jumbotron -->
+    <div class="jumbotron">
+        <div class="content_box" style="display:none" id="maintenanceMsg">
+            <p><font size=6 color="#DB0400"><b>The server is currently unavailable due to maintenance work. Please try
+                again in a few hours.</b></font></p>
+        </div>
+
+        <div class="content_box" style="display:block" id="formContentBox">
+
+            <div class="col_w320 float_l">
+
+                <!-- Instructions link and content -->
+                <form name="myForm" method="post" action="../cgi-bin/new_multicrispr.cgi" target="_blank"
+                      enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <h4><u> Input coding sequences </u></h4>
+                    <font color="gray"> <i> A gene can be divided to <font color="red"><b>exons</b></font> by indicating
+                        each as a separate sequence with an identical accession name in order of appearance.</i> </font>
+                    <div>
+                        Upload sequences file (in <a href="http://en.wikipedia.org/wiki/FASTA_format" target=blank>FASTA
+                        format</font></a> ): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                            type="file" name="inputFile" id="inputFile" class="buttons" style="display: inline-block;"
+                            onclick="javascript:onChooseFile()"></input>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR<br>
+                        Paste here:
+                        </br>
+                        <textarea name="inputText" id="inputText" rows=8 cols=130 id="inputText"
+                                  style="font-size:10px; border:solid; border-color: #36648B;"></textarea>
+                        <br>
+                        <input type="button" name="btnLoadExample" id="btnLoadExample" class="buttons"
+                               style="padding: 3px 15px; margin: 2px 2px;" onclick="javascript:loadExample()"
+                               value="Load Example"></input>
+
+                    </div>
+                    PAM sequence:
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary btn-sm active">
+                            <input type="radio" name="pam" value="NGG" checked> NGG
+                        </label>
+                        <label class="btn btn-primary btn-sm">
+                            <input type="radio" name="pam" value="NGG or NAG"> NGG or NAG
+                        </label>
+                    </div>
+                    <div>
+                        <br>
+                        <a role="button" data-toggle="collapse" data-target="#Advanced_options">Advanced options</a>
+                        <!--
+                        <input type="checkbox" name="display advanced option" onclick="javascript:display_advanced()"><font color="#36648B"><u> Advanced options</u></font>
+                        -->
+                    </div>
+
+                    <div id="Advanced_options" class="collapse" role="tabpanel">
+                        <div>
+                            Scoring Function:
+                            <select name="funcType" id="funcType">
+                                <option value="CRISPR Design">CRISPR Design</option>
+                                <option value="Azimuth" selected="yes">CFD score</option>
+                                <option value="CCtop">CCtop</option>
+                            </select>
+                            <a id="popoverfuncType" data-toggle="hover" class="btn btn-default" rel="popover"
+                               data-html="true"
+                               data-content="<a href='http://multicrispr.tau.ac.il/help.html#scoring function' target='_blank'>go to help page</a>">?</a>
+                        </div>
+
+                        <div>
+                            Optimization criterion: <a id="popoverThreshold" data-toggle="hover" class="btn btn-default"
+                                                       rel="popover" data-html="true"
+                                                       data-content="<a href='http://multicrispr.tau.ac.il/help.html#optimization criterion' target='_blank'>go to help page</a>">?</a>
+                            <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="useThreshold" value="no" checked onclick="javascript:display_threshold('no')">
+                            Consider all genes
+                            <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="useThreshold" value="yes" onclick="javascript:display_threshold('yes')">
+                            Consider only genes above a threshold: <input type="number" id="threshold" name="threshold"
+                                                                          step="0.01" min="0.01" max="1" value="0.45">
+
+                        </div>
+
+
+                        <div class="checkbox">
+                            <label>
+                                Consider gene homology? &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" data-toggle="toggle" data-size="mini" name="homology"
+                                       data-width="50">
+                                <a id="popoverHomology" data-toggle="hover" class="btn btn-default" rel="popover"
+                                   data-html="true"
+                                   data-content="Create subsets of homologous genes and design sgRNAs for each. <a href='http://multicrispr.tau.ac.il/help.html#consider homology' target='_blank'>For more information.</a> ">?</a>
+                            </label>
+                        </div>
+
+                        Do you wish to automatically begin genome-wide off-targets detection for the best 5 sgRNAs? <br>
+
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="btn-crista" id="btn-crista" value="No" checked
+                                           onclick="javascript:hide_div_name('Crista')"> No
+
+
+                        <br>&nbsp;&nbsp;&nbsp;<input type="radio" name="btn-crista" id="btn-crista" value="Yes"
+                                           onclick="javascript:show_div_name('Crista')"> Yes
+                        <br>
+
+                        <div id="Crista">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Genome assembly:&nbsp;
+                            <select name="genomeAssembly" id="genomeAssembly">
+                                <option value="Not_selected">Please select genome assembly</option>
+                                <option disabled>DEUTEROSTOMES</option>
+                                <option value="ci1">&nbsp;&nbsp;Ciona (ci1)
+                                </option>
+                                <option value="ci2">&nbsp;&nbsp;Ciona (ci2)</option>
+                                <option value="braFlo1">&nbsp;&nbsp;Lancelet (braFlo1)</option>
+                                <option value="strPur1">&nbsp;&nbsp;Urchin (strPur1)</option>
+                                <option value="strPur2">&nbsp;&nbsp;Urchin (strPur2)</option>
+                                <option disabled></option>
+                                <option disabled>INSECTS</option>
+                                <option value="anoGam1">&nbsp;&nbsp;A. gambiae (anoGam1)</option>
+                                <option value="apiMel1">&nbsp;&nbsp;A. mellifera (apiMel1)</option>
+                                <option value="apiMel2">&nbsp;&nbsp;A. mellifera (apiMel2)</option>
+                                <option value="droAna1">&nbsp;&nbsp;D. ananassae (droAna1)</option>
+                                <option value="droAna2">&nbsp;&nbsp;D. ananassae (droAna2)</option>
+                                <option value="droAna3">&nbsp;&nbsp;D. ananassae (droAna3)</option>
+                                <option value="droEre1">&nbsp;&nbsp;D. erecta (droEre1)</option>
+                                <option value="droEre2">&nbsp;&nbsp;D. erecta (droEre2)</option>
+                                <option value="droGri1">&nbsp;&nbsp;D. grimshawi (droGri1)</option>
+                                <option value="droGri2">&nbsp;&nbsp;D. grimshawi (droGri2)</option>
+                                <option value="dm1">&nbsp;&nbsp;D. melanogaster (dm1)</option>
+                                <option value="dm2">&nbsp;&nbsp;D. melanogaster (dm2)</option>
+                                <option value="dm3">&nbsp;&nbsp;D. melanogaster (dm3)</option>
+                                <option value="dm6">&nbsp;&nbsp;D. melanogaster (dm6)</option>
+                                <option value="droMoj1">&nbsp;&nbsp;D. mojavensis (droMoj1)</option>
+                                <option value="droMoj2">&nbsp;&nbsp;D. mojavensis (droMoj2)</option>
+                                <option value="droMoj3">&nbsp;&nbsp;D. mojavensis (droMoj3)</option>
+                                <option value="droPer1">&nbsp;&nbsp;D. persimilis (droPer1)</option>
+                                <option value="dp2">&nbsp;&nbsp;D. pseudoobscura (dp2)</option>
+                                <option value="dp3">&nbsp;&nbsp;D. pseudoobscura (dp3)</option>
+                                <option value="dp4">&nbsp;&nbsp;D. pseudoobscura (dp4)</option>
+                                <option value="droSec1">&nbsp;&nbsp;D. sechellia (droSec1)</option>
+                                <option value="droSim1">&nbsp;&nbsp;D. simulans (droSim1)</option>
+                                <option value="droVir1">&nbsp;&nbsp;D. virilis (droVir1)</option>
+                                <option value="droVir2">&nbsp;&nbsp;D. virilis (droVir2)</option>
+                                <option value="droVir3">&nbsp;&nbsp;D. virilis (droVir3)</option>
+                                <option value="droWil1">&nbsp;&nbsp;D. willistoni (droWil1)</option>
+                                <option value="droYak1">&nbsp;&nbsp;D. yakuba (droYak1)</option>
+                                <option value="droYak2">&nbsp;&nbsp;D. yakuba (droYak2)</option>
+                                <option value="triCas2">&nbsp;&nbsp;T. castaneum (triCas2)</option>
+                                <option disabled></option>
+                                <option disabled>NEMATODES</option>
+                                <option value="caePb1">&nbsp;&nbsp;C. brenneri (caePb1)</option>
+                                <option value="caePb2">&nbsp;&nbsp;C. brenneri (caePb2)</option>
+                                <option value="cb3">&nbsp;&nbsp;C. briggsae (cb3)</option>
+                                <option value="ce10">&nbsp;&nbsp;C. elegans (ce10)</option>
+                                <option value="ce11">&nbsp;&nbsp;C. elegans (ce11)</option>
+                                <option value="ce2">&nbsp;&nbsp;C. elegans (ce2)</option>
+                                <option value="ce4">&nbsp;&nbsp;C. elegans (ce4)</option>
+                                <option value="ce6">&nbsp;&nbsp;C. elegans (ce6)</option>
+                                <option value="caeJap1">&nbsp;&nbsp;C. japonica (caeJap1)</option>
+                                <option value="caeRem2">&nbsp;&nbsp;C. remanei (caeRem2)</option>
+                                <option value="caeRem3">&nbsp;&nbsp;C. remanei (caeRem3)</option>
+                                <option value="priPac1">&nbsp;&nbsp;P. pacificus (priPac1)</option>
+                                <option disabled></option>
+                                <option disabled>PLANTS</option>
+                                <option value="ASM34733v1">&nbsp;&nbsp;Aegilops tauschii (ASM34733v1)</option>
+                                <option value="AMTR1.0">&nbsp;&nbsp;Amborella trichopoda (AMTR1.0)</option>
+                                <option value="Alyr_1.0">&nbsp;&nbsp;Arabidopsis lyrata (Alyr_1.0)</option>
+                                <option value="TAIR10">&nbsp;&nbsp;Arabidopsis thaliana (TAIR10)</option>
+                                <option value="RefBeet1.2.2">&nbsp;&nbsp;Beta vulgaris (RefBeet-1.2.2)</option>
+                                <option value="Brach_dist_v1.0">&nbsp;&nbsp;Brachypodium distachyon (v1.0)</option>
+                                <option value="AST_PRJEB5043_v1">&nbsp;&nbsp;Brassica napus (AST_PRJEB5043_v1)</option>
+                                <option value="BOL_v2.1">&nbsp;&nbsp;Brassica oleracea (BOL_v2.1)</option>
+                                <option value="Bra_napus_v1.0">&nbsp;&nbsp;Brassica napus (AST_PRJEB5043_v1)</option>
+                                <option value="Brapa_1.0">&nbsp;&nbsp;Brassica rapa (IVFCAASv1)</option>
+                                <option value="chlamydomonas_reinhardtii_v3.1">&nbsp;&nbsp;Chlamydomonas reinhardtii
+                                    (v3.1)
+                                </option>
+                                <option value="cyanidioschyzon_merolae_ASM9120v1">&nbsp;&nbsp;Cyanidioschyzon merolae
+                                    (ASM9120v1)
+                                </option>
+                                <option value="glycine_max_v1">&nbsp;&nbsp;Glycine max (V1.0)</option>
+                                <option value="hordeum_vulgare_ASM32608v1">&nbsp;&nbsp;Hordeum vulgare (ASM32608v1)
+                                </option>
+                                <option value="Lperr_V1.4">&nbsp;&nbsp;Leersia perrieri (Lperr_V1.4)</option>
+                                <option value="MedtrA17_4.0">&nbsp;&nbsp;Medicago truncatula (MedtrA17_4.0)</option>
+                                <option value="MA1">&nbsp;&nbsp;Musa acuminata (MA1)</option>
+                                <option value="o.barthii_v1">&nbsp;&nbsp;Oryza barthii (O.barthii_v1)</option>
+                                <option value="oryza_brachyantha.v1.4b">&nbsp;&nbsp;Oryza brachyantha
+                                    (Oryza_brachyantha.v1.4b)
+                                </option>
+                                <option value="oryza_glaberrima_V1">&nbsp;&nbsp;Oryza glaberrima (Oryza_glaberrima_V1)
+                                </option>
+                                <option value="oryza_glumaepatula_v1.5">&nbsp;&nbsp;Oryza glumaepatula
+                                    (Oryza_glumaepatula_v1.5)
+                                </option>
+                                <option value="oryza_indica_ASM465v1">&nbsp;&nbsp;Oryza indica (ASM465v1)</option>
+                                <option value="O_longistaminata_v1.0">&nbsp;&nbsp;Oryza longistaminata
+                                    (O_longistaminata_v1.0)
+                                </option>
+                                <option value="Oryza_meridionalis_v1.3">&nbsp;&nbsp;Oryza meridionalis
+                                    (Oryza_meridionalis_v1.3)
+                                </option>
+                                <option value="Oryza_nivara_v1.0">&nbsp;&nbsp;Oryza nivara (Oryza_nivara_v1.0)</option>
+                                <option value="Oryza_punctata_v1.2">&nbsp;&nbsp;Oryza punctata (Oryza_punctata_v1.2)
+                                </option>
+                                <option value="OR_W1943">&nbsp;&nbsp;Oryza rufipogon (OR_W1943)</option>
+                                <option value="IRGSP-1.0">&nbsp;&nbsp;Oryza sativa (IRGSP-1.0)</option>
+                                <option value="ostreococcus_lucimarinus_ASM9206v1">&nbsp;&nbsp;Ostreococcus lucimarinus
+                                    (ASM9206v1)
+                                </option>
+                                <option value="physcomitrella_patens_ASM242v1">&nbsp;&nbsp;Physcomitrella patens
+                                    (ASM242v1)
+                                </option>
+                                <option value="populus_trichocarpa_JGI2.0">&nbsp;&nbsp;Populus trichocarpa (JGI2.0)
+                                </option>
+                                <option value="Prupe1_0">&nbsp;&nbsp;Prunus persica (Prupe1_0)</option>
+                                <option value="selaginella_moellendorffii_v1.0">&nbsp;&nbsp;Selaginella moellendorffii
+                                    (v1.0)
+                                </option>
+                                <option value="setaria_italica_JGIv2.0">&nbsp;&nbsp;Setaria italica (JGIv2.0)</option>
+                                <option value="SL2.50">&nbsp;&nbsp;Solanum lycopersicum (SL2.50)</option>
+                                <option value="SolTub_3.0">&nbsp;&nbsp;Solanum tuberosum (SolTub_3.0)</option>
+                                <option value="Sorbi1">&nbsp;&nbsp;Sorghum bicolor (Sorbi1)</option>
+                                <option value="Theobroma_cacao_20110822">&nbsp;&nbsp;Theobroma cacao
+                                    (Theobroma_cacao_20110822)
+                                </option>
+                                <option value="Trpr">&nbsp;&nbsp;Trifolium pratense (Trpr)</option>
+                                <option value="TGACv1">&nbsp;&nbsp;Triticum aestivum (TGACv1)</option>
+                                <option value="triticum_urartu_ASM34745v1">&nbsp;&nbsp;Triticum urartu (ASM34745v1)
+                                </option>
+                                <option value="vitis_vinifera_IGGP_12x">&nbsp;&nbsp;Vitis vinifera (IGGP_12x)</option>
+                                <option value="AGPv4">&nbsp;&nbsp;Zea mays (AGPv4)</option>
+                                <option disabled></option>
+                                <option disabled>VERTEBRATES</option>
+                                <option value="vicPac1">&nbsp;&nbsp;Alpaca (vicPac1)</option>
+                                <option value="vicPac2">&nbsp;&nbsp;Alpaca (vicPac2)</option>
+                                <option value="allMis1">&nbsp;&nbsp;American alligator (allMis1)</option>
+                                <option value="dasNov3">&nbsp;&nbsp;Armadillo (dasNov3)</option>
+                                <option value="gadMor1">&nbsp;&nbsp;Atlantic cod (gadMor1)</option>
+                                <option value="papAnu2">&nbsp;&nbsp;Baboon (papAnu2)</option>
+                                <option value="papHam1">&nbsp;&nbsp;Baboon (papHam1)</option>
+                                <option value="panPan1">&nbsp;&nbsp;Bonobo (panPan1)</option>
+                                <option value="aptMan1">&nbsp;&nbsp;Brown kiwi (aptMan1)</option>
+                                <option value="melUnd1">&nbsp;&nbsp;Budgerigar (melUnd1)</option>
+                                <option value="otoGar1">&nbsp;&nbsp;Bushbaby (otoGar1)</option>
+                                <option value="otoGar3">&nbsp;&nbsp;Bushbaby (otoGar3)</option>
+                                <option value="felCat3">&nbsp;&nbsp;Cat (felCat3)</option>
+                                <option value="felCat4">&nbsp;&nbsp;Cat (felCat4)</option>
+                                <option value="felCat5">&nbsp;&nbsp;Cat (felCat5)</option>
+                                <option value="felCat8">&nbsp;&nbsp;Cat (felCat8)</option>
+                                <option value="galGal2">&nbsp;&nbsp;Chicken (galGal2)</option>
+                                <option value="galGal3">&nbsp;&nbsp;Chicken (galGal3)</option>
+                                <option value="galGal4">&nbsp;&nbsp;Chicken (galGal4)</option>
+                                <option value="galGal5">&nbsp;&nbsp;Chicken (galGal5)</option>
+                                <option value="panTro1">&nbsp;&nbsp;Chimp (panTro1)</option>
+                                <option value="panTro2">&nbsp;&nbsp;Chimp (panTro2)</option>
+                                <option value="panTro3">&nbsp;&nbsp;Chimp (panTro3)</option>
+                                <option value="panTro4">&nbsp;&nbsp;Chimp (panTro4)</option>
+                                <option value="panTro5">&nbsp;&nbsp;Chimp (panTro5)</option>
+                                <option value="criGri1">&nbsp;&nbsp;Chinese hamster (criGri1)</option>
+                                <option value="latCha1">&nbsp;&nbsp;Coelacanth (latCha1)</option>
+                                <option value="bosTau2">&nbsp;&nbsp;Cow (bosTau2)</option>
+                                <option value="bosTau3">&nbsp;&nbsp;Cow (bosTau3)</option>
+                                <option value="bosTau4">&nbsp;&nbsp;Cow (bosTau4)</option>
+                                <option value="bosTau6">&nbsp;&nbsp;Cow (bosTau6)</option>
+                                <option value="bosTau7">&nbsp;&nbsp;Cow (bosTau7)</option>
+                                <option value="bosTau8">&nbsp;&nbsp;Cow (bosTau8)</option>
+                                <option value="macFas5">&nbsp;&nbsp;Crab-eating macaque (macFas5)</option>
+                                <option value="canFam1">&nbsp;&nbsp;Dog (canFam1)</option>
+                                <option value="canFam3">&nbsp;&nbsp;Dog (canFam3)</option>
+                                <option value="turTru2">&nbsp;&nbsp;Dolphin (turTru2)</option>
+								<option value="anas_plat1">&nbsp;&nbsp;Duck (anasPlatyrhynchos1.0)</option>
+                                <option value="loxAfr3">&nbsp;&nbsp;Elephant (loxAfr3)</option>
+                                <option value="calMil1">&nbsp;&nbsp;Elephant shark (calMil1)</option>
+                                <option value="musFur1">&nbsp;&nbsp;Ferret (musFur1)</option>
+                                <option value="fr1">&nbsp;&nbsp;Fugu (fr1)</option>
+                                <option value="fr2">&nbsp;&nbsp;Fugu (fr2)</option>
+                                <option value="fr3">&nbsp;&nbsp;Fugu (fr3)</option>
+                                <option value="nomLeu1">&nbsp;&nbsp;Gibbon (nomLeu1)</option>
+                                <option value="nomLeu2">&nbsp;&nbsp;Gibbon (nomLeu2)</option>
+                                <option value="nomLeu3">&nbsp;&nbsp;Gibbon (nomLeu3)</option>
+                                <option value="gorGor3">&nbsp;&nbsp;Gorilla (gorGor3)</option>
+                                <option value="gorGor4">&nbsp;&nbsp;Gorilla (gorGor4)</option>
+                                <option value="gorGor5">&nbsp;&nbsp;Gorilla (gorGor5)</option>
+                                <option value="cavPor2">&nbsp;&nbsp;Guinea pig (cavPor2)</option>
+                                <option value="cavPor3">&nbsp;&nbsp;Guinea pig (cavPor3)</option>
+                                <option value="eriEur1">&nbsp;&nbsp;Hedgehog (eriEur1)</option>
+                                <option value="eriEur2">&nbsp;&nbsp;Hedgehog (eriEur2)</option>
+                                <option value="equCab1">&nbsp;&nbsp;Horse (equCab1)</option>
+                                <option value="equCab2">&nbsp;&nbsp;Horse (equCab2)</option>
+                                <option value="hg16">&nbsp;&nbsp;Human (hg16)</option>
+                                <option value="hg18">&nbsp;&nbsp;Human (hg18)</option>
+                                <option value="hg19">&nbsp;&nbsp;Human
+                                    (hg19)
+                                </option>
+                                <option value="hg38">&nbsp;&nbsp;Human (hg38)</option>
+                                <option value="dipOrd1">&nbsp;&nbsp;Kangaroo rat (dipOrd1)</option>
+                                <option value="petMar1">&nbsp;&nbsp;Lamprey (petMar1)</option>
+                                <option value="petMar2">&nbsp;&nbsp;Lamprey (petMar2)</option>
+                                <option value="anoCar1">&nbsp;&nbsp;Lizard (anoCar1)</option>
+                                <option value="anoCar2">&nbsp;&nbsp;Lizard (anoCar2)</option>
+                                <option value="galVar1">&nbsp;&nbsp;Malayan flying lemur (galVar1)</option>
+                                <option value="triMan1">&nbsp;&nbsp;Manatee (triMan1)</option>
+                                <option value="calJac1">&nbsp;&nbsp;Marmoset (calJac1)</option>
+                                <option value="calJac3">&nbsp;&nbsp;Marmoset (calJac3)</option>
+                                <option value="oryLat2">&nbsp;&nbsp;Medaka (oryLat2)</option>
+                                <option value="geoFor1">&nbsp;&nbsp;Medium ground finch (geoFor1)</option>
+                                <option value="pteVam1">&nbsp;&nbsp;Megabat (pteVam1)</option>
+                                <option value="myoLuc2">&nbsp;&nbsp;Microbat (myoLuc2)</option>
+                                <option value="balAcu1">&nbsp;&nbsp;Minke whale (balAcu1)</option>
+                                <option value="mm10">&nbsp;&nbsp;Mouse (mm10)</option>
+                                <option value="mm7">&nbsp;&nbsp;Mouse (mm7)</option>
+                                <option value="mm8">&nbsp;&nbsp;Mouse (mm8)</option>
+                                <option value="mm9">&nbsp;&nbsp;Mouse (mm9)</option>
+                                <option value="micMur1">&nbsp;&nbsp;Mouse lemur (micMur1)</option>
+                                <option value="micMur2">&nbsp;&nbsp;Mouse lemur (micMur2)</option>
+                                <option value="hetGla1">&nbsp;&nbsp;Naked mole-rat (hetGla1)</option>
+                                <option value="hetGla2">&nbsp;&nbsp;Naked mole-rat (hetGla2)</option>
+                                <option value="oreNil2">&nbsp;&nbsp;Nile tilapia (oreNil2)</option>
+                                <option value="monDom2">&nbsp;&nbsp;Opossum (monDom2)</option>
+                                <option value="monDom4">&nbsp;&nbsp;Opossum (monDom4)</option>
+                                <option value="monDom5">&nbsp;&nbsp;Opossum (monDom5)</option>
+                                <option value="ponAbe2">&nbsp;&nbsp;Orangutan (ponAbe2)</option>
+                                <option value="chrPic1">&nbsp;&nbsp;Painted turtle (chrPic1)</option>
+                                <option value="ailMel1">&nbsp;&nbsp;Panda (ailMel1)</option>
+                                <option value="susScr2">&nbsp;&nbsp;Pig (susScr2)</option>
+                                <option value="susScr3">&nbsp;&nbsp;Pig (susScr3)</option>
+                                <option value="ochPri2">&nbsp;&nbsp;Pika (ochPri2)</option>
+                                <option value="ochPri3">&nbsp;&nbsp;Pika (ochPri3)</option>
+                                <option value="ornAna1">&nbsp;&nbsp;Platypus (ornAna1)</option>
+                                <option value="ornAna2">&nbsp;&nbsp;Platypus (ornAna2)</option>
+                                <option value="oryCun2">&nbsp;&nbsp;Rabbit (oryCun2)</option>
+                                <option value="rn4">&nbsp;&nbsp;Rat (rn4)</option>
+                                <option value="rn5">&nbsp;&nbsp;Rat (rn5)</option>
+                                <option value="rn6">&nbsp;&nbsp;Rat (rn6)</option>
+                                <option value="rheMac2">&nbsp;&nbsp;Rhesus (rheMac2)</option>
+                                <option value="rheMac3">&nbsp;&nbsp;Rhesus (rheMac3)</option>
+                                <option value="rheMac8">&nbsp;&nbsp;Rhesus (rheMac8)</option>
+                                <option value="proCap1">&nbsp;&nbsp;Rock hyrax (proCap1)</option>
+                                <option value="oviAri1">&nbsp;&nbsp;Sheep (oviAri1)</option>
+                                <option value="oviAri3">&nbsp;&nbsp;Sheep (oviAri3)</option>
+                                <option value="sorAra1">&nbsp;&nbsp;Shrew (sorAra1)</option>
+                                <option value="sorAra2">&nbsp;&nbsp;Shrew (sorAra2)</option>
+                                <option value="choHof1">&nbsp;&nbsp;Sloth (choHof1)</option>
+                                <option value="speTri2">&nbsp;&nbsp;Squirrel (speTri2)</option>
+                                <option value="saiBol1">&nbsp;&nbsp;Squirrel monkey (saiBol1)</option>
+                                <option value="gasAcu1">&nbsp;&nbsp;Stickleback (gasAcu1)</option>
+                                <option value="tarSyr1">&nbsp;&nbsp;Tarsier (tarSyr1)</option>
+                                <option value="tarSyr2">&nbsp;&nbsp;Tarsier (tarSyr2)</option>
+                                <option value="sarHar1">&nbsp;&nbsp;Tasmanian devil (sarHar1)</option>
+                                <option value="echTel1">&nbsp;&nbsp;Tenrec (echTel1)</option>
+                                <option value="echTel2">&nbsp;&nbsp;Tenrec (echTel2)</option>
+                                <option value="tetNig1">&nbsp;&nbsp;Tetraodon (tetNig1)</option>
+                                <option value="tetNig2">&nbsp;&nbsp;Tetraodon (tetNig2)</option>
+                                <option value="tupBel1">&nbsp;&nbsp;Tree shrew (tupBel1)</option>
+                                <option value="melGal1">&nbsp;&nbsp;Turkey (melGal1)</option>
+                                <option value="macEug2">&nbsp;&nbsp;Wallaby (macEug2)</option>
+                                <option value="cerSim1">&nbsp;&nbsp;White rhinoceros (cerSim1)</option>
+                                <option value="xenTro1">&nbsp;&nbsp;X. tropicalis (xenTro1)</option>
+                                <option value="xenTro2">&nbsp;&nbsp;X. tropicalis (xenTro2)</option>
+                                <option value="xenTro3">&nbsp;&nbsp;X. tropicalis (xenTro3)</option>
+                                <option value="xenTro7">&nbsp;&nbsp;X. tropicalis (xenTro7)</option>
+                                <option value="taeGut1">&nbsp;&nbsp;Zebra finch (taeGut1)</option>
+                                <option value="taeGut2">&nbsp;&nbsp;Zebra finch (taeGut2)</option>
+                                <option value="danRer10">&nbsp;&nbsp;Zebrafish (danRer10)</option>
+                                <option value="danRer3">&nbsp;&nbsp;Zebrafish (danRer3)</option>
+                                <option value="danRer4">&nbsp;&nbsp;Zebrafish (danRer4)</option>
+                                <option value="danRer5">&nbsp;&nbsp;Zebrafish (danRer5)</option>
+                                <option value="danRer6">&nbsp;&nbsp;Zebrafish (danRer6)</option>
+                                <option value="danRer7">&nbsp;&nbsp;Zebrafish (danRer7)</option>
+                                <option disabled></option>
+                                <option disabled>VIRUSES</option>
+                                <option value="eboVir3">&nbsp;&nbsp;Ebola Virus (eboVir3)</option>
+                                <option disabled></option>
+                                <option disabled>YEAST</option>
+                                <option value="sacCer1">&nbsp;&nbsp;S. cerevisiae (sacCer1)</option>
+                                <option value="sacCer2">&nbsp;&nbsp;S. cerevisiae (sacCer2)</option>
+                                <option value="sacCer3">&nbsp;&nbsp;S. cerevisiae (sacCer3)</option>
+                            </select> <br><i><font face="Arial" size="2" COLOR="#A0A0A0">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;230 genome assemblies are available, including vertebrates, plants, yeast, insects and
+                            deuterostomes!<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Is your reference of choice missing? <a
+                                href="mailto:shiranabadi@mail.tau.ac.il?Subject=CRISTA: add more genomic references">Please
+                            let
+                            us know</a>.</font></i>
+
+                        </div> <!-- end of div Crista -->
+                        <!--/div-->
+                        <!--
+                        Consider gene homology?
+                        <input type="checkbox" name="homology">
+                        <a id="popoverHomology" data-toggle="hover" class="btn btn-default" rel="popover" data-html="true" data-content="Create subsets of homologous genes and design sgRNAs for each. <a href='http://multicrispr.tau.ac.il/help.html#consider homology' target='_blank'>For more information.</a> ">?</a-->
+
+
+                    <br>
+            </div> <!-- and of div advanced option -->
+
+            <div class="form-group">
+                <label for="inputEmail">Email address (optional)</label>
+                <input type="email" class="form-control" name="inputEmail" placeholder="Enter email">
+            </div>
+
+			<div class="form-group">
+                <label for="jobTitle">Job title (optional)</label>
+                <input type="text" class="form-control" name="jobTitle"
+                       placeholder="Add a descriptive job title to your query">
+            </div>
+
+            
+			
+
+			
+				
+	 		<div>
+				<input id='recaptcha_check_empty' required tabindex='-1' placeholder="VVVVVVVV"
+				style='width:100px; height:0; opacity:0; pointer-events:none; 
+				position:absolute; 
+				bottom:100;left:500;'>
+			</div>
+		
+			
+			<div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LdCZJ0UAAAAAM8WfaJtI3QeQWWJg42ZIUOQdaA4"></div>
+
+             <input type="submit" name="Submit" value="Submit" id="submitFormBtn">
+       
+
+        </form>
+		
+
+		
+        </div>
+        <div class="col_w320 float_r">
+        </div>
+
+
+    </div>
+</div>      <!-- jumbotron -->
+</div> <!-- /container -->
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--script src="https://code.jquery.com/jquery-1.10.2.min.js"></script-->
+<!--script src="bootstrap-3.0.3/dist/js/bootstrap.min.js"></script-->
+<!--script src="/js/googleAnalytics.js"></script-->
+
+</body>
+</html>
+

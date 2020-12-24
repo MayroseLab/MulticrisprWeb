@@ -1,0 +1,127 @@
+
+		html {
+		 overflow-y: -moz-scrollbars-vertical;
+		 overflow-y: scroll;
+		}
+
+		body 
+		{
+			/*background-image:url('http://clumpak.tau.ac.il/img/edited_cells2.jpg');*/
+			/*background-size:100%; */
+			background: #F9F9F7 url('http://clumpak.tau.ac.il/img/a1.gif') repeat-x;
+			
+			padding-top: 0px;
+			padding-bottom: 0px;
+		}
+
+		/*h1{
+			display: inline;
+			font-size: 200%;
+		}*/
+
+		h1.small {
+			font-variant:small-caps;
+			display: inline;	
+			font-size: 50px;
+		}
+
+		.navbar
+		{
+			margin-bottom: 0px;
+			border: 0px;
+		}
+
+		.navbar-default .navbar-collapse
+		{
+			background-color: #B0C27C;
+			margin-top: 0px;
+			margin-bottom: -20px;
+			margin-right: 0px;
+			margin-left: 0px;
+			font-size: 20px;
+			padding-left: 55px;
+			padding-right: 55px;
+
+		}
+		
+		
+		.navbar-default .navbar-nav > .active > a, 
+		.navbar-default .navbar-nav > .active > a:hover, 
+		.navbar-default .navbar-nav > .active > a:focus 
+		{
+			background-color: #9CB57B;
+		}		
+		
+		
+		
+		.container 
+		{
+		    /*position: relative;
+			top: 120px;*/
+			margin: 0 auto;
+			width: 80%;
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+		
+		.container .jumbotron 
+		{
+			margin-top: 0px;
+			margin-bottom: 0px;
+			background-color: #B4CFB0;
+			border-radius: 0px;
+		}
+
+		.jumbotron 
+		{
+			margin-top: 0px;
+			margin-bottom: 0px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			
+		}	
+		
+		.row 
+		{
+			width: 100%;
+			padding-top: 20px;
+			padding-bottom: 20px;
+			padding-left: 10px;
+			padding-right: 10px;
+
+			margin-right: 0px;
+			margin-left: 0px;
+		
+			background-color: #B6E3F2;
+		}
+		
+		.popover-content 
+		{
+			font-size: 15px;
+		}
+		
+		.form-control
+		{
+			width: 40%;
+		}
+		
+		/*#advanced
+		{
+			border:2px solid #a1a1a1;
+			border-radius:25px;
+			padding:5px 20px; 
+			margin-top: 25px;
+			margin-bottom: 0px;
+		}*/
+		
+		/* for the results tree - override bootstrap's css ?*/
+		.treerow {
+			width: 100%;
+			padding-top: 0px;
+			padding-bottom: 0px;
+			padding-left: 0px;
+			padding-right: 0px;
+			margin-right: 0px;
+			margin-left: 0px;
+			background: none;
+		}
